@@ -32,13 +32,22 @@ ts_data_tbl <- ts_data_tbl %>%
             GainLoss == 0 ~ "Neither", 
             GainLoss < 0 ~ "Loss"
         ), 
-        Average30Mins = zoo::rollmean(x = GainLoss, k = 6, align = "right", fill = NA)
+        Average30Mins = zoo::rollmean(x = total, k = 6, align = "right", fill = NA)
     ) %>% ungroup()
 ts_data_tbl
 ```
 
 
 ```{r}
+ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = total)) + 
+    geom_line() + 
+    geom_line(mapping = aes(y = Average30Mins))
+
+ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = total)) + 
+    geom_area()
+
 ts_data_tbl %>% 
     ggplot(mapping = aes(x = Date, y = total)) + 
     geom_line()
