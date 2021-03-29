@@ -1,0 +1,57 @@
+---
+title: "Hack-A-Thon Visualizations"
+author: "Nicholas Rivera"
+date: "3/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
+
+```{r}
+ts_data_tbl <- read.csv(file = "data/Crypto_Hackathon_aRmy.csv")
+ts_data_tbl
+```
+
+
+```{r}
+ts_data_tbl <- ts_data_tbl %>% 
+    mutate(
+        Date = date %>% mdy_hm(),
+        # Day = Date %>% ymd(), 
+        Hour_12 = Date %>% hour(), 
+        Minute = Date %>% minute()
+    ) %>% 
+    mutate(
+        GainLoss = total - lag(x = total, n = 1), 
+        Flag = case_when(
+            GainLoss > 0 ~ "Gain", 
+            GainLoss == 0 ~ "Neither", 
+            GainLoss < 0 ~ "Loss"
+        ), 
+        Average30Mins = zoo::rollmean(x = GainLoss, k = 6, align = "right", fill = NA)
+    ) %>% ungroup()
+ts_data_tbl
+```
+
+
+```{r}
+ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = total)) + 
+    geom_line()
+
+ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = GainLoss)) + 
+    geom_line()
+
+ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = GainLoss)) + 
+    geom_col()
+
+
+
+```
+
