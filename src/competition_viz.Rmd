@@ -44,14 +44,21 @@ ts_data_tbl %>%
     geom_line()
 
 ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = total)) + 
+    geom_area(fill = "darkgreen") + 
+    geom_area(mapping = aes(y = penalty), fill = "red")
+
+ts_data_tbl %>% 
+    ggplot(mapping = aes(x = Date, y = total)) + 
+    geom_line() + 
+    geom_area(mapping = aes(y = penalty), fill = "red")
+
+ts_data_tbl %>% 
     ggplot(mapping = aes(x = Date, y = GainLoss)) + 
     geom_line()
 
 ts_data_tbl %>% 
     ggplot(mapping = aes(x = Date, y = GainLoss)) + 
     geom_col()
-
-
-
 ```
 
